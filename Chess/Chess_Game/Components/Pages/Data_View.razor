@@ -1,0 +1,72 @@
+﻿@page "/Data_View"
+@inject Chess_GameDbContext DbContext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject IChess_GameRepository Repository
+@inject IJSRuntime JS
+@using System.Text.Json;
+@inject Chess_Game.Services.SharedDataService SharedData
+
+
+<h2 class="d-flex justify-content-center" style="margin-bottom : 70px ; font-size : 2.7em">
+    Chess Data
+</h2>
+
+
+<div class="container-fluid">
+
+    <div>
+        @if (SharedData.SharedValue is null)
+        {
+            <div class="Chess_Games-item">
+                loading Chess_Games...
+            </div>
+        }
+        else if (SharedData.SharedValue.Any())
+        {
+            <table class="table table-bordered table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>rated</th>
+                        <th>victory_status</th>
+                        <th>winner</th>
+                        <th>opening_name</th>
+                        <th>Turns</th>
+                        <th>white rating</th>
+                        <th>black rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var game in SharedData.SharedValue)
+                    {
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>@game.rated</td>
+                            <td>@game.victory_status</td>
+                            <td>@game.winner</td>
+                            <td>@game.opening_name</td>
+                            <td>@game.TurnsG</td>
+                            <td>@game.the_white_rating</td>
+                            <td>@game.the_black_rating</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="Chess_Games-item">
+                no games found!
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+@code {
+    
+}

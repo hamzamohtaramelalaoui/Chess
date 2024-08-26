@@ -1,0 +1,423 @@
+﻿@page "/"
+@inject Chess_GameDbContext DbContext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject IChess_GameRepository Repository
+@inject IJSRuntime JS
+@using System.Text.Json;
+@inject Chess_Game.Services.SharedDataService SharedData
+
+
+
+<h2 class="d-flex justify-content-center" style="margin-bottom : 70px ; font-size : 2.7em">
+    Chess Games
+</h2>
+
+
+
+<div id="chart" style="height: 600px; width: 100%; margin-bottom: 30px; border: 1px solid black;"></div>
+
+    <div id="chartw" style="height: 550px; width: 100%; margin-bottom: 30px; border: 1px solid black;; "></div>
+    <div id="chartb" style="height: 550px; width: 100%; margin-bottom: 30px; border: 1px solid black;;"></div>
+    <div id="chartt" style="height: 550px; width: 100%; margin-bottom: 30px; border: 1px solid black;;"></div>
+
+
+
+    <div id="chartG" style="height: 600px; width: 100%; margin-bottom: 30px; border: 1px solid black;;"></div> 
+
+
+
+
+<div style="margin-bottom: 15px; border: 1px solid black;">
+    <div style="margin-left: 20px;">
+        <input id="white" type="radio" name="winnerFilter" value="#FF4500" /> <label for="white" style="color: #FF4500;">White</label>
+        <input id="black" type="radio" name="winnerFilter" value="#000000" /> <label for="black" style="color: #000000;">Black</label>
+        <input id="draw" type="radio" name="winnerFilter" value="#00FF00" /> <label for="draw" style="color: #00FF00;">Draw</label>
+        <input id="all" type="radio" name="winnerFilter" value="all" checked /> <label for="all">All games</label>
+    </div>
+<div id="chartD" style="height: 700px; width: 1000px; margin-top: 15px;"></div>
+
+</div>
+
+@code {
+    private List<Game>? games;
+    public int firstchild = 0;
+    public string behind = "one piece";
+    public string op_top = string.Empty;
+    public string myjson = string.Empty;
+    public string myjsonW = string.Empty;
+    public string myjsonB = string.Empty;
+    public string myjsonT = string.Empty;
+    public string turnsjson = string.Empty;
+    public string gamesjson = string.Empty;
+    public string my_op = string.Empty;
+    public int op_count = 0;
+    public string top_op = string.Empty;
+
+
+
+
+    public List<smallgame> smallmodel { get; set; } = new List<smallgame>();
+    public List<turnG> my_turns { get; set; } = new List<turnG>();
+    public List<WLthis> BW { get; set; } = new List<WLthis>();
+    public List<pers> W_pers { get; set; } = new List<pers>();
+    public List<pers> B_pers { get; set; } = new List<pers>();
+    public List<pers> T_pers { get; set; } = new List<pers>();
+    public List<top_game> my_top { get; set; } = new List<top_game>();
+    public List<op> opening { get; set; } = new List<op>();
+    public List<string> top_opening { get; set; } = new List<string>();
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        games = await Repository.GetAllAsync();
+
+
+        SharedData.SharedValue = games;
+
+
+
+        foreach (var game in games)
+        {
+            smallgame model = new smallgame
+            {
+                Black_rating = game.the_black_rating,
+                White_rating = game.the_white_rating,
+                winner = ""
+            };
+
+            smallmodel.Add(model);
+        }
+
+        for (int i = 0 ; i< smallmodel.Count; i++)
+        {
+            if (games[i].winner == "white")
+            {
+                smallmodel[i].winner = "#FF4500";
+            }
+
+            else if (games[i].winner == "black")
+            {
+                smallmodel[i].winner = "#000000";
+            }
+
+            else if (games[i].winner == "draw")
+            {
+                smallmodel[i].winner = "#00FF00";
+            }
+        }
+
+        gamesjson = JsonSerializer.Serialize(smallmodel);
+        howmany(games);
+        firstgraphe(myjson);
+        many_graphes(myjsonW, myjsonB, myjsonT);
+        turns_mean(turnsjson);
+        gameshadow(gamesjson);
+    }
+
+    private async Task firstgraphe(string jsondata)
+    {
+        await JS.InvokeVoidAsync("graphe1", myjson);
+    }
+
+    private async Task many_graphes(string jsondataW , string jsondataB , string jsondataT)
+    {
+        await JS.InvokeVoidAsync("graphes", myjsonW,myjsonB,myjsonT);
+    }
+
+    private async Task gameshadow(string gamesjson)
+    {
+        await JS.InvokeVoidAsync("shadow", gamesjson);
+    }
+
+
+
+    private async Task turns_mean(string turnsjson)
+    {
+        await JS.InvokeVoidAsync("turns", turnsjson);
+    }
+
+
+
+    public void howmany(List<Game> games)
+    {
+        foreach (Game game in games)
+        {
+            op exist = null;
+            my_op = game.opening_name;
+            exist = opening.FirstOrDefault(op => op.op_name == my_op);
+
+            if (exist == null)
+            {
+                op new_op = new op
+                    {
+                        op_name = my_op,
+                        op_count = 1
+                    };
+
+                opening.Add(new_op);
+
+            }
+
+            else
+            {
+                exist.op_count++;
+            }
+        }
+
+        SharedData.OpeningList = opening;
+
+        opening.Sort((op1, op2) => op2.op_count.CompareTo(op1.op_count));
+
+        for (int i = 0; i < 25; i++)
+        {
+            top_op = opening[i].op_name;
+            top_opening.Add(top_op);
+        }
+        foreach (string open in top_opening)
+        {
+            top_game new_top = new top_game
+                {
+                    op_nom = open,
+                    CWW = 0,
+                    CBW = 0
+                };
+
+            my_top.Add(new_top);
+        }
+
+        foreach (op openi in opening)
+        {
+            string one = openi.op_name;
+            WLthis toaddit = new WLthis
+                {
+                    open = one,
+                    Wwin = 0,
+                    tie = 0,
+                    Bwin = 0,
+                    WwinP = 0,
+                    BwinP = 0,
+                    tieP = 0
+
+                };
+
+            BW.Add(toaddit);
+        }
+
+        foreach (Game game in games)
+        {
+            if (game.victory_status != "draw")
+            {
+                if (game.winner == "white")
+                {
+                    for (int i = 0; i < 1476; i++)
+                    {
+                        if (game.opening_name == BW[i].open)
+                        {
+                            BW[i].Wwin++;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 1476; i++)
+                    {
+                        if (game.opening_name == BW[i].open)
+                        {
+                            BW[i].Bwin++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            else if (game.victory_status == "draw")
+            {
+                for (int i = 0; i < 1476; i++)
+                {
+                    if (game.opening_name == BW[i].open)
+                    {
+                        BW[i].tie++;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
+        for (int i = 0; i < 1476; i++)
+        {
+            for (int j = 0; j < 1476; j++)
+            {
+                if(BW[i].open == opening[j].op_name)
+                {
+                    float a = BW[i].Wwin;
+                    float x = BW[i].Bwin;
+                    float y = BW[i].tie;
+                    float b = opening[j].op_count;
+                    BW[i].WwinP = (float)(((float)(a / b)) * 100);
+                    BW[i].BwinP = (float)(((float)(x / b)) * 100);
+                    BW[i].tieP = (float)(((float)(y / b)) * 100);
+                    break;
+                }
+            }
+        }
+
+        SharedData.SharedList = BW;
+
+
+
+
+
+        for (int i = 0; i < BW.Count; i++)
+        {
+            for (int j = 0; j < 1476; j++)
+            {
+                if (BW[i].open == opening[j].op_name)
+                {
+                    if (opening[j].op_count < 49)
+                    {
+                        BW.Remove(BW[i]);
+
+                    }
+
+                }
+            }
+        }
+
+        
+
+
+
+        BW.Sort((op1, op2) => op2.WwinP.CompareTo(op1.WwinP));
+        for (int i = 0; i < 25; i++)
+        {
+            string a = BW[i].open;
+            int b = BW[i].Wwin;
+            float c = BW[i].WwinP;
+
+            pers model = new pers
+            {
+                p_op = a,
+                countw = b,
+                pourcentage = c
+            };
+
+            W_pers.Add(model);
+
+        }
+
+
+        myjsonW = JsonSerializer.Serialize(W_pers);
+
+        BW.Sort((op1, op2) => op2.BwinP.CompareTo(op1.BwinP));
+        for (int i = 0; i < 25; i++)
+        {
+            string a = BW[i].open;
+            int b = BW[i].Bwin;
+            float c = BW[i].BwinP;
+
+            pers model = new pers
+                {
+                    p_op = a,
+                    countw = b,
+                    pourcentage = c
+                };
+
+            B_pers.Add(model);
+        }
+        myjsonB = JsonSerializer.Serialize(B_pers);
+
+        BW.Sort((op1, op2) => op2.tieP.CompareTo(op1.tieP));
+        for (int i = 0; i < 25; i++)
+        {
+            string a = BW[i].open;
+            int b = BW[i].tie;
+            float c = BW[i].tieP;
+
+            pers model = new pers
+                {
+                    p_op = a,
+                    countw = b,
+                    pourcentage = c
+                };
+
+            T_pers.Add(model);
+        }
+        myjsonT = JsonSerializer.Serialize(T_pers);
+
+
+        foreach (Game game in games)
+        {
+            op_top = game.opening_name;
+            bool exist = top_opening.Contains(op_top);
+
+            if(exist == true)
+            {
+
+                if(game.victory_status != "draw")
+                {
+                    for (int i= 0 ; i < 25; i++)
+                    {
+                        if (my_top[i].op_nom == op_top)
+                        {
+                            if (game.winner == "white")
+                            {
+                                my_top[i].CWW++;
+                                break;
+                            }
+                            else
+                            {
+                                my_top[i].CBW++;
+                                break;
+                            }
+
+                        }
+                    }
+
+
+                }
+            }
+        }
+        myjson = JsonSerializer.Serialize(my_top);
+
+
+        opening.Sort((op1, op2) => op2.op_count.CompareTo(op1.op_count));
+
+        for (int i = 0; i < 25; i++)
+        {
+            firstchild = 0;
+            foreach (Game game in games)
+            {
+                if (game.opening_name == opening[i].op_name)
+                {
+                    firstchild = firstchild + game.TurnsG;
+                }
+            }
+
+            turnG child = new turnG
+                {
+                    openG = opening[i].op_name,
+                    meanturns = firstchild / opening[i].op_count
+                };
+            my_turns.Add(child);
+
+        }
+
+        
+        
+
+        turnsjson = JsonSerializer.Serialize(my_turns);
+
+    }
+
+
+    
+
+
+
+}

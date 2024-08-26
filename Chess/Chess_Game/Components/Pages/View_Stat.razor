@@ -1,0 +1,72 @@
+﻿@page "/View_Stat"
+@inject Chess_GameDbContext DbContext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject IChess_GameRepository Repository
+@inject IJSRuntime JS
+@using System.Text.Json;
+@inject Chess_Game.Services.SharedDataService SharedData
+
+
+<h2 class="d-flex justify-content-center" style="margin-bottom : 70px ; font-size : 2.7em">
+    Chess Games Stats
+</h2>
+
+
+<div class="container-fluid">
+
+    <div>
+        @if (SharedData.SharedList is null)
+        {
+            <div class="Chess_Games-item">
+                loading Chess_Games...
+            </div>
+        }
+        else if (SharedData.SharedList.Any())
+        {
+            <table class="table table-bordered table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Opening</th>
+                        <th> White Wins</th>
+                        <th> Tie </th>
+                        <th>Black wins</th>
+                        <th>White %</th>
+                        <th>Tie %</th>
+                        <th>Black %</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var game in SharedData.SharedList)
+                    {
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>@game.open</td>
+                            <td>@game.Wwin</td>
+                            <td>@game.tie</td>
+                            <td>@game.Bwin</td>
+                            <td>@game.WwinP</td>
+                            <td>@game.tieP</td>
+                            <td>@game.BwinP</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="Chess_Games-item">
+                no sat found!
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+@code {
+
+}

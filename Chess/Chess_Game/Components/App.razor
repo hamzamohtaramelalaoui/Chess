@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="Chess_Game.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet />
+    
+</head>
+
+<body>
+    <Routes />
+    <script src="_framework/blazor.web.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.2/echarts.min.js"></script>
+
+
+    <script>
+        function graphe1(jsondata) {
+            const data = JSON.parse(jsondata);
+
+            const names = data.map(item => (item.op_nom).slice(0,25));
+            const white = data.map(item => item.CWW);
+            const black = data.map(item => item.CBW);
+
+            var myChart = echarts.init(document.getElementById('chart'));
+
+            const option = {
+                title: {
+                    text: 'Winner Depending on Opening',
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['White', 'Black']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: names,
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'White',
+                        type: 'bar',
+                        data: white,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: 'Max' },
+                                { type: 'min', name: 'Min' }
+                            ]
+                        },
+                        markLine: {
+                            data: [{ type: 'average', name: 'Avg' }]
+                        }
+                    },
+                    {
+                        name: 'Black',
+                        type: 'bar',
+                        data: black,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: 'Max' },
+                                { type: 'min', name: 'Min' }
+                            ]
+                        },
+                        markLine: {
+                            data: [{ type: 'average', name: 'Avg' }]
+                        }
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+
+
+
+
+        function turns(turnsjson) {
+            const dataturn = JSON.parse(turnsjson);
+
+            const opening = dataturn.map(item => (item.openG).slice(0,25));
+            const mean = dataturn.map(item => item.meanturns);
+
+
+            var myChartG = echarts.init(document.getElementById('chartG'));
+
+            option = {
+                title: {
+                    text: 'Opening with most Moves'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['Turns mean']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                
+                xAxis: {
+                    type: 'category',
+                    data: opening,
+                    axisLabel: {
+                        rotate: 60
+                    }
+
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 30
+                },
+                series: [
+                    {
+                        name: 'Turns mean',
+                        type: 'line',
+                        step: 'start',
+                        data: mean
+                    }
+                ],
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+
+                
+
+            };
+
+            myChartG.setOption(option);
+
+        }
+
+
+
+
+
+
+        function graphes(jsondataW, jsondataB, jsondataT) {
+            
+            const dataw = JSON.parse(jsondataW);
+
+            const namesw = dataw.map(item => item.p_op);
+            const wwin = dataw.map(item => item.countw);
+            const wwinp = dataw.map(item => item.pourcentage);
+
+            var myChartw = echarts.init(document.getElementById('chartw'));
+
+            const datab = JSON.parse(jsondataB);
+
+            
+            const namesb = datab.map(item => item.p_op);
+            const bwin = datab.map(item => item.countw);
+            const bwinp = datab.map(item => item.pourcentage);
+
+            
+            var myChartb = echarts.init(document.getElementById('chartb'));
+
+            const datat = JSON.parse(jsondataT);
+
+            
+            const namest = datat.map(item => item.p_op);
+            const twin = datat.map(item => item.countw);
+            const twinp = datat.map(item => item.pourcentage);
+
+            
+            var myChartt = echarts.init(document.getElementById('chartt'));
+
+            let dataAxisw = namesw;
+            let datawh = wwin;
+            let yMax = 500;
+            let dataShadow = [];
+            for (let i = 0; i < datawh.length; i++) {
+                dataShadow.push(yMax);
+            }
+            const optionw = {
+                title: {
+                    text: 'best opening for white',
+                },
+                xAxis: {
+                    data: dataAxisw,
+                    axisLabel: {
+                        inside: true,
+                        color: '#fff',
+                        rotate: 90
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    z: 10
+                },
+                yAxis: {
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: '#999'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return `${params.name}: ${params.value}`;
+                    },
+                    backgroundColor: '#333',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    padding: [5, 10]
+                },
+
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    }
+                ],
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        showBackground: true,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#83bff6' },
+                                { offset: 0.5, color: '#188df0' },
+                                { offset: 1, color: '#188df0' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#2378f7' },
+                                    { offset: 0.7, color: '#2378f7' },
+                                    { offset: 1, color: '#83bff6' }
+                                ])
+                            }
+                        },
+                        data: datawh
+                    }
+                ]
+            };
+            
+            const zoomSize = 6;
+            myChartw.on('click', function (params) {
+                console.log(dataAxisw[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+                myChartw.dispatchAction({
+                    type: 'dataZoom',
+                    startValue: dataAxisw[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                    endValue:
+                        dataAxisw[Math.min(params.dataIndex + zoomSize / 2, datawh.length - 1)]
+                });
+            });
+            myChartw.setOption(optionw);
+
+
+
+            let dataAxisb = namesb;
+            let databl = bwin;
+            for (let i = 0; i < databl.length; i++) {
+                dataShadow.push(yMax);
+            }
+            const optionb = {
+                title: {
+                    text: 'best opening for black',
+                },
+                xAxis: {
+                    data: dataAxisb,
+                    axisLabel: {
+                        inside: true,
+                        color: '#fff',
+                        rotate: 90
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    z: 10
+                },
+                yAxis: {
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: '#999'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return `${params.name}: ${params.value}`;
+                    },
+                    backgroundColor: '#333',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    padding: [5, 10]
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    }
+                ],
+                series: [
+                    {
+                        type: 'bar',
+                        showBackground: true,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#83bff6' },
+                                { offset: 0.5, color: '#188df0' },
+                                { offset: 1, color: '#188df0' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#2378f7' },
+                                    { offset: 0.7, color: '#2378f7' },
+                                    { offset: 1, color: '#83bff6' }
+                                ])
+                            }
+                        },
+                        data: databl
+                    }
+                ]
+            };
+            
+            myChartb.on('click', function (params) {
+                console.log(dataAxisb[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+                myChartb.dispatchAction({
+                    type: 'dataZoom',
+                    startValue: dataAxisb[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                    endValue:
+                        dataAxisb[Math.min(params.dataIndex + zoomSize / 2, databl.length - 1)]
+                });
+            });
+            myChartb.setOption(optionb);
+
+
+
+            let dataAxist = namest;
+            let datati = twin;
+            for (let i = 0; i < datati.length; i++) {
+                dataShadow.push(yMax);
+            }
+            optiont = {
+                title: {
+                    text: 'opening with most ties',
+                },
+                xAxis: {
+                    data: dataAxist,
+                    axisLabel: {
+                        inside: true,
+                        color: '#fff',
+                        rotate: 90
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    z: 10
+                },
+                yAxis: {
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: '#999'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return `${params.name}: ${params.value}`;
+                    },
+                    backgroundColor: '#333',
+                    borderColor: '#777',
+                    borderWidth: 1,
+                    padding: [5, 10]
+                },
+                dataZoom: [
+                    {
+                        type: 'inside'
+                    }
+                ],
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        showBackground: true,
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#83bff6' },
+                                { offset: 0.5, color: '#188df0' },
+                                { offset: 1, color: '#188df0' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#2378f7' },
+                                    { offset: 0.7, color: '#2378f7' },
+                                    { offset: 1, color: '#83bff6' }
+                                ])
+                            }
+                        },
+                        data: datati
+                    }
+                ]
+            };
+            
+            myChartt.on('click', function (params) {
+                console.log(dataAxist[Math.max(params.dataIndex - zoomSize / 2, 0)]);
+                myChartt.dispatchAction({
+                    type: 'dataZoom',
+                    startValue: dataAxist[Math.max(params.dataIndex - zoomSize / 2, 0)],
+                    endValue:
+                        dataAxist[Math.min(params.dataIndex + zoomSize / 2, datati.length - 1)]
+                });
+            });
+            myChartt.setOption(optiont);
+            
+        }
+
+
+
+
+
+
+
+
+        
+
+            
+
+        function shadow(gamesjson) {
+            const dataG = JSON.parse(gamesjson);
+            var myChartD = echarts.init(document.getElementById('chartD'));
+
+            document.querySelectorAll('input[name="winnerFilter"]').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    const selectedValue = this.value;
+                    updateChart(selectedValue, dataG, myChartD);
+                });
+
+            });
+
+            const defaultFilterValue = document.querySelector('input[name="winnerFilter"]:checked').value;
+            updateChart(defaultFilterValue, dataG, myChartD);
+
+
+
+            function updateChart(selectedValue, dataG, myChartD) {
+
+                const dataset = dataG.filter(item => selectedValue === 'all' || item.winner === selectedValue)
+
+                myChartD.setOption(getOption(dataset));
+            }
+
+
+            
+        }
+
+        function getOption(dataset) {
+            return {
+                xAxis: {
+                    name: 'Black_rating',
+                    splitLine: { show: false },
+                    min: 700,
+                    max: 2700,
+                    interval: 100
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                yAxis: {
+                    name: 'White_rating',
+                    splitLine: { show: false },
+                    min: 700,
+                    max: 2700,
+                    interval: 100
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+
+                series: [
+                    {
+                        zlevel: 1,
+                        name: 'Games',
+                        type: 'scatter',
+                        data: dataset.map(item => [
+                            item.Black_rating,
+                            item.White_rating,
+                            item.winner
+                        ]),
+                        itemStyle: {
+                            color: params => params.data[2]
+                        },
+                        animationThreshold: 5000,
+                        progressiveThreshold: 5000
+                    }
+                ],
+                animationEasingUpdate: 'cubicInOut',
+                animationDurationUpdate: 2000,
+            };
+        }
+
+
+
+            
+            
+         
+        
+        
+
+
+    </script>
+
+
+</body>
+
+</html>

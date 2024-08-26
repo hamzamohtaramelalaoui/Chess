@@ -1,0 +1,62 @@
+﻿@page "/Opening_Use"
+@inject Chess_GameDbContext DbContext
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject IChess_GameRepository Repository
+@inject IJSRuntime JS
+@using System.Text.Json;
+@inject Chess_Game.Services.SharedDataService SharedData
+
+
+<h2 class="d-flex justify-content-center" style="margin-bottom : 70px ; font-size : 2.7em">
+    Chess Opening
+</h2>
+
+
+<div class="container-fluid">
+
+    <div>
+        @if (SharedData.OpeningList is null)
+        {
+            <div class="Opening-item">
+                loading Opening...
+            </div>
+        }
+        else if (SharedData.OpeningList.Any())
+        {
+            <table class="table table-bordered table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Opening name</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var game in SharedData.OpeningList)
+                    {
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>@game.op_name</td>
+                            <td>@game.op_count</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="Opening-item">
+                no Opening found!
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+@code {
+
+}
