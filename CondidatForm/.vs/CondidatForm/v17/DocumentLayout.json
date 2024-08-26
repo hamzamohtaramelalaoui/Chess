@@ -1,0 +1,126 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\PC\\source\\repos\\CondidatForm\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|c:\\users\\pc\\source\\repos\\condidatform\\default.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:default.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|C:\\Users\\PC\\source\\repos\\CondidatForm\\default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|C:\\Users\\PC\\source\\repos\\CondidatForm\\affichecond.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:affichecond.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|C:\\Users\\PC\\source\\repos\\CondidatForm\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|C:\\Users\\PC\\source\\repos\\CondidatForm\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|C:\\Users\\PC\\source\\repos\\CondidatForm\\affichecond.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55C14206-C491-483C-902C-9421ED957F41}|CondidatForm.csproj|solutionrelative:affichecond.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Default.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Default.aspx.cs",
+              "RelativeDocumentMoniker": "Default.aspx.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Default.aspx.cs",
+              "RelativeToolTip": "Default.aspx.cs",
+              "ViewState": "AQIAAKoAAAAAAAAAAAAQwLkAAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-25T10:07:25.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Default.aspx",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Default.aspx",
+              "RelativeDocumentMoniker": "Default.aspx",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Default.aspx",
+              "RelativeToolTip": "Default.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-07-25T10:02:44.046Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AfficheCond.aspx",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\AfficheCond.aspx",
+              "RelativeDocumentMoniker": "AfficheCond.aspx",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\AfficheCond.aspx",
+              "RelativeToolTip": "AfficheCond.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-07-24T15:20:00.319Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Web.config",
+              "RelativeDocumentMoniker": "Web.config",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Web.config",
+              "RelativeToolTip": "Web.config",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABQAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-07-24T09:17:07.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Site.Master",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Site.Master",
+              "RelativeDocumentMoniker": "Site.Master",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\Site.Master",
+              "RelativeToolTip": "Site.Master",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2024-07-23T13:10:51.361Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AfficheCond.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\CondidatForm\\AfficheCond.aspx.cs",
+              "RelativeDocumentMoniker": "AfficheCond.aspx.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\CondidatForm\\AfficheCond.aspx.cs",
+              "RelativeToolTip": "AfficheCond.aspx.cs",
+              "ViewState": "AQIAABMAAAAAAAAAAAAQwBMAAADSAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-24T15:20:57.864Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
