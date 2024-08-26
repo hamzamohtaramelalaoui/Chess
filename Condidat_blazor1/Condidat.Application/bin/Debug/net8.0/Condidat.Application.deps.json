@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Condidat.Application/1.0.0": {
+        "dependencies": {
+          "Condidat.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Condidat.Application.dll": {}
+        }
+      },
+      "Condidat.Domain/1.0.0": {
+        "runtime": {
+          "Condidat.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Condidat.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Condidat.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

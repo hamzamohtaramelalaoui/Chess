@@ -1,0 +1,278 @@
+﻿@page "/"
+@inject CondidatDbContext DbContext
+@inject NavigationManager Navigation
+@inject ICondidatRepository Repository
+@rendermode InteractiveServer
+
+
+@inject IJSRuntime JS
+
+<h3>Condidat Form</h3>
+
+
+
+<EditForm Enhance="true" Model="Cond" FormName="Add_Condidat" OnValidSubmit="addCondidat">
+
+    <DataAnnotationsValidator />
+        <ValidationSummary />
+    
+    <div>
+        <label for="IdCond">Id_Condidat</label>
+        <InputText id="CondId" @bind-Value="Cond.CondidatId" class="form-control" @oninput="dothat" />
+    </div>
+
+    <div>
+        <label for="NameCond">Nom Condidat</label>
+        <InputText id="CondName" @bind-Value="Cond.Nom" class="form-control" />
+    </div>
+
+    <div>
+        <label for="LastNCond">Prenom Condidat</label>
+        <InputText id="CondlastN" @bind-Value="Cond.Prenom" class="form-control" />
+    </div>
+
+    <div>
+        <label for="BirthCond">Date de naissance</label>
+        <InputDate id="CondBirth" @bind-Value="Cond.DateNaissance" class="form-control" />
+    </div>
+
+    <div>
+        <label for="EmailCond">Email</label>
+        <InputText id="CondEmail" @bind-Value="Cond.Email" class="form-control" />
+    </div>
+
+    <div>
+        <label for="EmailPhone">Phone</label>
+        <InputText id="CondPhone" @bind-Value="Cond.Phone" class="form-control" />
+    </div>
+
+    <div>
+        <label for="Adresse">Adresse</label>
+        <InputText id="CondAdresse" @bind-Value="Cond.Adresse" class="form-control" />
+    </div>
+
+    <div>
+        <label for="Situation">Situation Familiale</label>
+        <InputSelect id="Situation" @bind-Value="Cond.Situation" class="form-control">
+            <option value="">Select Situation</option>
+            @foreach (var situation in Enum.GetValues(typeof(Situation)))
+            {
+                <option value="@situation">@situation.ToString()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="Sexe">Sexe</label>
+        <InputSelect id="Sexe" @bind-Value="Cond.sexe" class="form-control">
+            <option value="">Select Sexe</option>
+            @foreach (var sexeC in Enum.GetValues(typeof(Sexe)))
+            {
+                <option value="@sexeC">@sexeC.ToString()</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div>
+        <label for="Region">Region</label>
+        <select id="Region" Value="@selectedregionID" @onchange="e => { regionID_OnChange(e); }" class="form-control">
+            <option value="0">Select Region</option>
+            @foreach (var region in regions)
+            {
+                <option value="@region.RegionId">@region.Name</option>
+            }
+            
+
+        </select>
+
+    </div>
+
+    <div>
+        <label for="Ville">Ville</label>
+        <select id="Ville" Value="@selectedvilleID" @onchange="villeID_OnChange" class="form-control">
+            <option value="0">Select Ville</option>
+            @foreach (var city in villes)
+            {
+                <option value="@city.VilleId">@city.Name</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <label for="Commune">Commune</label>
+        <select id="Commune" Value="@selectedcommuneID" @onchange="e => { communeID_OnChange(e); }" class="form-control">
+            <option value="0">Select Commune</option>
+            @foreach (var commune in communes)
+            {
+                <option value="@commune.CommuneId">@commune.Name</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <div>
+            <label for="Source">Source : </label>
+        </div>
+        <div style="margin-left : 30px">
+            <input type="checkbox" id="Internet" @onchange="e => { CheckboxChanged(0, e); }" />
+            <label for="Internet">Internet</label>
+        </div>
+        <div style="margin-left : 30px">
+            <input type="checkbox" id="Journal" @onchange="e => { CheckboxChanged(1, e); }" />
+            <label for="Journal">Journal</label>
+        </div>
+        <div style="margin-left : 30px">
+            <input type="checkbox" id="Ami" @onchange="e => { CheckboxChanged(2, e); }" />
+            <label for="Ami">Ami</label>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center" style="margin-top : 50px ; margin-bottom : 40px">
+        <button type="submit" class="btn btn-primary ml-3" style="margin-right : 10px">Valider</button>
+
+        <a href="/affichage" class="btn btn-outline-success ml-3">Back to list</a>
+        
+    </div>
+
+    
+    
+</EditForm>
+
+
+
+
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Condidate Cond { get; set; } = new();
+
+    public List<Region> regions { get; set; } = new List<Region>();
+    public List<Ville> villes { get; set; } = new List<Ville>();
+    public List<Commune> communes { get; set; } = new List<Commune>();
+    public string selectedregionID = "";
+    public string selectedvilleID = "";
+    public string selectedcommuneID = "";
+    public Region selectedregion = new();
+    public Ville selectedville = new();
+    public Commune selectedcommune = new();
+    public string source = string.Empty;
+    public List<string> mysources { get; set; } = new List<string> {"","",""};
+    public List<Condidate> condidatcatched { get; set; } = new List<Condidate>();
+    public string textR { get; set; } = " here is : ";
+
+
+
+    private void CheckboxChanged(int index, ChangeEventArgs e)
+    {
+        bool isChecked = (bool)e.Value;
+        mysources[index] = isChecked ? ((Source)index).ToString() : "";
+        Cond.Source = string.Join(", ", mysources.Where(s => !string.IsNullOrEmpty(s)));
+    }
+
+
+
+    private async Task addCondidat()
+    {
+        string thisid = Cond.CondidatId;
+        condidatcatched = DbContext.Condidats.Where(x => x.CondidatId == thisid).ToList();
+
+        if (!condidatcatched.Any())
+        {
+            await Repository.AddAsync(Cond);
+            Navigation.NavigateTo("/affichage");
+        }
+        else
+        {
+            await ShowAlert();
+        }
+    }
+
+
+
+    private async Task ShowAlert()
+    {
+        await JS.InvokeVoidAsync("showAlert", "This Id already exist!");
+    }
+
+    private async Task dothat()
+    {
+        await JS.InvokeVoidAsync("thisisit");
+    }
+
+
+    protected override void OnInitialized()
+    {
+        GetRegions();
+        base.OnInitialized();
+
+    }
+
+    public void GetRegions()
+    {
+        regions = DbContext.Regions.ToList();
+
+    }
+
+    public void GetVillesByRID(string r)
+    {
+        villes = DbContext.Villes.Where(x => x.RegionId == r).ToList();
+
+    }
+
+    public void GetCommunesByVID(string v)
+    {
+        communes = DbContext.Communes.Where(x => x.VilleId == v).ToList();
+    }
+
+    private void regionID_OnChange(ChangeEventArgs e)
+    {
+        selectedvilleID = "";
+        selectedcommuneID = "";
+
+        villes.Clear();
+        communes.Clear();
+        
+
+        if (Convert.ToString(e.Value) != null)
+        {
+            selectedregionID = e.Value.ToString();
+            selectedregion = DbContext.Regions.FirstOrDefault(x => x.RegionId == selectedregionID);
+            Cond.region = selectedregion.Name;
+            textR = textR + selectedregion.Name;
+            GetVillesByRID(selectedregionID);
+            
+        }
+        this.StateHasChanged();
+    }
+
+
+    private void villeID_OnChange(ChangeEventArgs e)
+    {
+
+        selectedcommuneID = "";
+
+        communes.Clear();
+
+        if (Convert.ToString(e.Value) != null)
+        {
+            selectedvilleID = e.Value.ToString();
+            selectedville = DbContext.Villes.FirstOrDefault(x => x.VilleId == selectedvilleID);
+            Cond.ville = selectedville.Name;
+            GetCommunesByVID(selectedvilleID);
+        }
+
+        this.StateHasChanged();
+    }
+
+
+    public void communeID_OnChange(ChangeEventArgs e)
+    {
+        if (Convert.ToString(e.Value) != null)
+        {
+            selectedcommuneID = e.Value.ToString();
+            selectedcommune = DbContext.Communes.FirstOrDefault(x => x.CommuneId == selectedcommuneID);
+            Cond.commune = selectedcommune.Name;
+        }
+    }
+}

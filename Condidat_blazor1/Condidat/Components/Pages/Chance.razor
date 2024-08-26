@@ -1,0 +1,92 @@
+﻿@page "/affichage"
+@inject CondidatDbContext DbContext
+@inject NavigationManager Navigation
+@inject ICondidatRepository Repository
+@rendermode InteractiveServer
+
+<h2 class="d-flex justify-content-center"  style="margin-bottom : 70px ; font-size : 2.7em">
+    Affichage Condidats
+</h2>
+
+<div class="container-fluid">
+
+    <div >
+        @if (condidats is null)
+        {
+            <div class="condidat-item">
+                loading condidats...
+            </div>
+        }
+        else if (condidats.Any()){
+            <table class="table table-bordered table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>E-mail</th>
+                        <th>Sexe</th>
+                        <th>Situation familiale</th>
+                        <th>Age</th>
+                        <th>Region</th>
+                        <th>Ville</th>
+                        <th>Commune</th>
+                        <th>Sources</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        @foreach (var condidat in condidats)
+                            {
+                                <tr data-widget="expandable-table" aria-expanded="false">
+                                    <td>@condidat.Nom</td>
+                                    <td>@condidat.Prenom</td>
+                                    <td>@condidat.Email</td>
+                                    <td>@condidat.sexe.ToString()</td>
+                                    <td>@condidat.Situation.ToString()</td>
+                                    <td>@CalculateAge(@condidat.DateNaissance)</td>
+                                    <td>@condidat.region</td>
+                                    <td>@condidat.ville</td>
+                                    <td>@condidat.commune</td>
+                                    <td>@condidat.Source</td>
+                                </tr>
+                            }
+                    
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="condidat-item">
+                no condidats found!
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <a href="" class="btn btn-primary">Add new Condidat</a>
+</div>
+
+
+@code {
+    private List<Condidate>? condidats;
+    
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        condidats = await Repository.GetAllAsync();
+    }
+
+    [Parameter]
+    public DateTime? date_naissance { get; set; }
+
+    public string CalculateAge(DateTime date_naissance)
+    {
+        var today = DateTime.Today;
+        var age = today.Year - date_naissance.Year;
+
+        return age.ToString();
+    }
+}
